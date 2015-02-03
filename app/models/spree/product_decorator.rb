@@ -17,7 +17,7 @@ module Spree
     end
 
     def google_merchant_title
-      self.name
+      self.name.split(/\s/).map {|w| w.capitalize}.join(' ')
     end
 
     # <g:google_product_category> Apparel & Accessories > Clothing > Dresses (From Google Taxon Map)
@@ -48,9 +48,9 @@ module Spree
       self.max_image_url
     end
 
-    def google_merchant_brand
-      self.first_property(:brand)
-    end
+ #   def google_merchant_brand
+ #     self.first_property(:brand)
+ #   end
 
     # <g:price> 15.00 USD
     def google_merchant_price
@@ -72,7 +72,7 @@ module Spree
     end
 
     def google_merchant_id
-      self.id
+      self.sku
     end
 
     # <g:gtin> 8-, 12-, or 13-digit number (UPC, EAN, JAN, or ISBN)
@@ -87,26 +87,26 @@ module Spree
 
     # <g:gender> Male, Female, Unisex
     def google_merchant_gender
-      value = self.first_property(:gender)
-      return unless value.present?
-      value.gsub('Girls','Female').gsub('Womens','Female').gsub('Boys','Male').gsub('Mens','Male')
+      'female'
     end
 
     # <g:age_group> Adult, Kids
     def google_merchant_age_group
-      value = self.first_property(:agegroup)
-      return unless value.present?
-      value.gsub('Adults','Adult')
+      'adult'
     end
 
     # <g:color>
     def google_merchant_color
-      self.first_property(:color)
+      self.first_property(:color).capitalize if self.first_property(:color)
     end
 
     # <g:size>
     def google_merchant_size
       self.first_property(:size)
+    end
+
+    def google_merchant_size_type
+      'petite'
     end
 
     # <g:adwords_grouping> single text value
@@ -243,7 +243,7 @@ module Spree
         self.taxons.first.name
       else
         ""
-      end      
+      end
     end
 
     def amazon_sku_bid
