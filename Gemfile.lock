@@ -1,4 +1,21 @@
 GIT
+  remote: git://github.com/spree/spree_static_content.git
+  revision: b72cfcb4b0511d52287d0e77cdaceac43af701f6
+  branch: 2-1-stable
+  specs:
+    spree_static_content (2.1.0.beta)
+      spree_core (~> 2.1.0)
+
+GIT
+  remote: git@github.com:Reformation/hub_gem.git
+  revision: 090058681413dbcdb10598ec3174d757f9e590ac
+  branch: master
+  specs:
+    spree_hub (2.2.0)
+      active_model_serializers (= 0.9.0.alpha1)
+      httparty
+
+GIT
   remote: git@github.com:Reformation/spree.git
   revision: 4cad38b6767c26b0d6a19b86364b2eb7ed7942df
   tag: v2.1.5
@@ -69,6 +86,8 @@ GEM
       erubis (~> 2.7.0)
       rack (~> 1.5.2)
       rack-test (~> 0.6.2)
+    active_model_serializers (0.9.0.alpha1)
+      activemodel (>= 3.2)
     active_utils (2.2.3)
       activesupport (>= 2.3.11)
       i18n
@@ -241,6 +260,10 @@ PLATFORMS
 DEPENDENCIES
   factory_girl (~> 2.6)
   rspec-rails (~> 2.7)
+  spree_api!
+  spree_backend!
   spree_core!
   spree_google_merchant!
+  spree_hub!
+  spree_static_content!
   sqlite3
