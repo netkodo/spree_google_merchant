@@ -106,7 +106,7 @@ module Spree
     end
 
     def google_merchant_size_type
-      'petite'
+      self.first_property(:size_type)
     end
 
     # <g:adwords_grouping> single text value
