@@ -71,7 +71,7 @@ module Spree
       end
     end
 
-    def google_merchant_id
+    def google_merchant_item_group_id
       self.sku
     end
 

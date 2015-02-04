@@ -141,6 +141,7 @@ module SpreeGoogleMerchant
             xml.tag!(k, value.to_s) if value.present?
           end
           xml.tag!('g:availability', variant.google_merchant_availability)
+          xml.tag!('g:id', variant.sku)
           build_shipping(xml, product)
           build_adwords_labels(xml, product)
           #build_custom_labels(xml, product)

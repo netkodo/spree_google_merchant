@@ -9,7 +9,7 @@ module SpreeGoogleMerchant
 
       # See http://support.google.com/merchants/bin/answer.py?hl=en&answer=188494#US for all other fields
       SpreeGoogleMerchant::FeedBuilder::GOOGLE_MERCHANT_ATTR_MAP = [
-          ['g:id', 'id'],
+          ['g:item_group_id', 'item_group_id'],
 #          ['g:gtin','gtin'],
 #          ['g:mpn', 'mpn'],
           ['title', 'title'],
