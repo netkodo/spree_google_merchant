@@ -106,8 +106,7 @@ module SpreeGoogleMerchant
         xml.channel do
           build_meta(xml)
 
-          Spree::Product.find_each(:batch_size => 1000) do |product|
-        #    next unless ad && ad.variant && ad.variant.product && validate_record(ad)
+          Spree::Product.includes(:properties, variants: :option_values).find_each(batch_size: 1000) do |product|
             next unless product && product.variants && validate_record(product)
             build_feed_item(xml, product)
           end
