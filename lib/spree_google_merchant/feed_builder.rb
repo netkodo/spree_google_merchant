@@ -146,7 +146,7 @@ module SpreeGoogleMerchant
           build_adwords_labels(xml, product)
           #build_custom_labels(xml, product)
         end
-      end if product.available?
+      end if product.google_merchant_available?
     end
 
     def build_images(xml, product)
