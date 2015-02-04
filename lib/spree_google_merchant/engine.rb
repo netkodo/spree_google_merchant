@@ -27,7 +27,6 @@ module SpreeGoogleMerchant
           ['g:gender','gender'],
           ['g:age_group','age_group'],
           ['g:color','color'],
-          ['g:size','size'],
           ['g:size_type','size_type'],
           ['g:adwords_grouping','adwords_group']
       ]
