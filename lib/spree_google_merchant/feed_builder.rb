@@ -81,19 +81,19 @@ module SpreeGoogleMerchant
     end
 
     def validate_record(product)
-      return false if product.images.length == 0 && product.imagesize == 0 rescue true
+      return false if @assets.select{|s| s.viewable_id == product.master.id}.length == 0 rescue true
       return false if product.google_merchant_title.nil?
-      return false if product.google_merchant_product_category.nil?
-      return false if product.google_merchant_availability.nil?
-      return false if product.google_merchant_price.nil?
+      #return false if product.google_merchant_product_category.nil?
+      #return false if product.google_merchant_availability.nil?
+      return false if product.google_merchant_price.nil? || product.google_merchant_price.to_i == 0
       return false if product.google_merchant_brand.nil?
       #return false if product.google_merchant_gtin.nil?
       #return false if product.google_merchant_mpn.nil?
       #return false unless validate_upc(product.upc)
 
-      unless product.google_merchant_sale_price.nil?
-        return false if product.google_merchant_sale_price_effective.nil?
-      end
+      #unless product.google_merchant_sale_price.nil?
+      #  return false if product.google_merchant_sale_price_effective.nil?
+      #end
 
       true
     end
@@ -105,8 +105,8 @@ module SpreeGoogleMerchant
       xml.rss(:version => '2.0', :"xmlns:g" => "http://base.google.com/ns/1.0") do
         xml.channel do
           build_meta(xml)
-
-          Spree::Product.includes(:properties, variants: :option_values).find_each(batch_size: 1000) do |product|
+          @assets = Spree::Asset.all
+          Spree::Product.includes(:taxons, :product_properties, :properties, :option_types, variants_including_master: [:default_price, :prices, :images, option_values: :option_type]).find_each(batch_size: 1000) do |product|
             next unless product && product.variants && validate_record(product)
             build_feed_item(xml, product)
           end
@@ -202,7 +202,7 @@ module SpreeGoogleMerchant
       list = [:category,:group,:type,:theme,:keyword,:color,:shape,:brand,:size,:material,:for,:agegroup]
       list.each do |prop|
         if labels.length < 10 then
-          value = product.property(prop)
+          value = product.google_merchant_property(prop)
           labels << value if value.present?
         end
       end

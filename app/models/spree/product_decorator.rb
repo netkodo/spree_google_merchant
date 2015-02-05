@@ -22,7 +22,7 @@ module Spree
 
     # <g:google_product_category> Apparel & Accessories > Clothing > Dresses (From Google Taxon Map)
     def google_merchant_product_category
-      self.first_property(:gm_product_category) || Spree::GoogleMerchant::Config[:product_category]
+      self.google_merchant_property(:gm_product_category) || Spree::GoogleMerchant::Config[:product_category]
     end
 
     def google_merchant_product_type
@@ -36,20 +36,20 @@ module Spree
     end
 
     # <g:availability> in stock | available for order | out of stock | preorder
-    def google_merchant_availability
-      self.master.stock_items.sum(:count_on_hand) > 0 ? 'in stock' : 'out of stock'
-    end
-
-    def google_merchant_quantity
-      self.master.stock_items.sum(:count_on_hand)
-    end
+#    def google_merchant_availability
+#      self.master.stock_items.sum(:count_on_hand) > 0 ? 'in stock' : 'out of stock'
+#    end
+#
+#    def google_merchant_quantity
+#      self.master.stock_items.sum(:count_on_hand)
+#    end
 
     def google_merchant_image_link
       self.max_image_url
     end
 
  #   def google_merchant_brand
- #     self.first_property(:brand)
+ #     self.google_merchant_property(:brand)
  #   end
 
     # <g:price> 15.00 USD
@@ -59,14 +59,14 @@ module Spree
 
     # <g:sale_price> 15.00 USD
     def google_merchant_sale_price
-      unless self.first_property(:gm_sale_price).nil?
-        format("%.2f %s", self.first_property(:gm_sale_price), self.currency).to_s
+      unless self.google_merchant_property(:gm_sale_price).nil?
+        format("%.2f %s", self.google_merchant_property(:gm_sale_price), self.currency).to_s
       end
     end
 
     # <g:sale_price_effective_date> 2011-03-01T13:00-0800/2011-03-11T15:30-0800
     def google_merchant_sale_price_effective_date
-      unless self.first_property(:gm_sale_price_effective).nil?
+      unless self.google_merchant_property(:gm_sale_price_effective).nil?
         return # TODO
       end
     end
@@ -97,21 +97,21 @@ module Spree
 
     # <g:color>
     def google_merchant_color
-      self.first_property(:color).capitalize if self.first_property(:color)
+      self.google_merchant_property(:color).capitalize if self.google_merchant_property(:color)
     end
 
     # <g:size>
-    def google_merchant_size
-      self.first_property(:size)
-    end
+#    def google_merchant_size
+#      self.google_merchant_property(:size)
+#    end
 
     def google_merchant_size_type
-      self.first_property(:size_type)
+      self.google_merchant_property(:size_type)
     end
 
     # <g:adwords_grouping> single text value
     def google_merchant_adwords_group
-      self.first_property(:gm_adwords_group)
+      self.google_merchant_property(:gm_adwords_group)
     end
 
     # <g:shipping_weight> # lb, oz, g, kg.
@@ -123,12 +123,18 @@ module Spree
 
     # <g:adult> TRUE | FALSE
     def google_merchant_adult
-      self.first_property(:gm_adult) unless self.first_property(:gm_adult).nil?
+      self.google_merchant_property(:gm_adult) unless self.google_merchant_property(:gm_adult).nil?
+    end
+
+    # reduce queries
+    def google_merchant_property prop
+      property_id = self.properties.select{|p| p.name == prop.to_s }[0].try(:id)
+      self.product_properties.select{|pp| pp.property_id == property_id }.first.try('value')
     end
 
     ## Amazon Listing Methods
     def amazon_category
-      self.first_property(:category)
+      self.google_merchant_property(:category)
     end
 
     def amazon_title
@@ -156,7 +162,7 @@ module Spree
     end
 
     def amazon_brand
-      self.first_property(:brand)
+      self.google_merchant_property(:brand)
     end
 
     def amazon_recommended_browse_node
@@ -187,7 +193,7 @@ module Spree
     end
 
     def amazon_department
-      self.first_property(:category)
+      self.google_merchant_property(:category)
     end
 
     def amazon_description
@@ -211,7 +217,7 @@ module Spree
     end
 
     def amazon_item_package_quantity
-      count = self.first_property(:count)
+      count = self.google_merchant_property(:count)
       if count.kind_of?(Array)
         count = count[0]
       end
@@ -223,19 +229,19 @@ module Spree
     end
 
     def amazon_size
-      self.first_property(:size)
+      self.google_merchant_property(:size)
     end
 
     def amazon_color
-      self.first_property(:color)
+      self.google_merchant_property(:color)
     end
 
     def amazon_gender
-      self.first_property(:gender)
+      self.google_merchant_property(:gender)
     end
 
     def amazon_material
-      self.first_property(:material)
+      self.google_merchant_property(:material)
     end
 
     def amazon_occasion
@@ -296,7 +302,7 @@ module Spree
     end
 
     def ebay_brand
-      self.first_property(:brand)
+      self.google_merchant_property(:brand)
     end
 
     def ebay_product_description
@@ -305,12 +311,12 @@ module Spree
 
     def ebay_product_type
       type = ""
-      if self.first_property(:type)
-        type = self.first_property(:type)
-      elsif self.first_property(:group)
-        type = self.first_property(:group)
-      elsif self.first_property(:category)
-        type = self.first_property(:category)
+      if self.google_merchant_property(:type)
+        type = self.google_merchant_property(:type)
+      elsif self.google_merchant_property(:group)
+        type = self.google_merchant_property(:group)
+      elsif self.google_merchant_property(:category)
+        type = self.google_merchant_property(:category)
       end
       if type.kind_of?(Array)
         type = type[0].to_s
@@ -320,14 +326,14 @@ module Spree
 
     def ebay_category
       types = []
-      if self.first_property(:category)
-        types << self.first_property(:category)
+      if self.google_merchant_property(:category)
+        types << self.google_merchant_property(:category)
       end
-      if self.first_property(:group)
-        types << self.first_property(:group)
+      if self.google_merchant_property(:group)
+        types << self.google_merchant_property(:group)
       end
-      if self.first_property(:type)
-        types << self.first_property(:type)
+      if self.google_merchant_property(:type)
+        types << self.google_merchant_property(:type)
       end
       types.join(' > ')
     end
@@ -341,7 +347,7 @@ module Spree
     end
 
     def bing_brand
-      self.first_property(:brand)
+      self.google_merchant_property(:brand)
     end
 
     def bing_producturl
