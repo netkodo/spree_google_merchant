@@ -22,7 +22,7 @@ module SpreeGoogleMerchant
           ['g:brand', 'brand'],
           ['g:image_link','image_link'],
           ['g:google_product_category','product_category'],
-          ['g:shipping_weight','shipping_weight'],
+#          ['g:shipping_weight','shipping_weight'],
           ['g:adult','adult'],
           ['g:gender','gender'],
           ['g:age_group','age_group'],

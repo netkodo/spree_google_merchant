@@ -182,9 +182,7 @@ module SpreeGoogleMerchant
     # <g:shipping>
     def build_shipping(xml, product)
       xml.tag!('g:shipping') do
-        xml.tag!('g:country', "US")
-        xml.tag!('g:service', "Ground")
-        xml.tag!('g:price', "0.00")
+        xml.tag!('g:price', "0.00 USD")
       end
     end
 
