@@ -19,6 +19,10 @@ namespace :spree_google_merchant do
     SpreeGoogleMerchant::FeedBuilder.transfer
   end
 
+  task :transfer_linkshare => [:environment] do |t, args|
+    SpreeGoogleMerchant::FeedBuilder.transfer :linkshare
+  end
+
   task :generate_and_transfer_shipments => [:environment] do |t, args|
     SpreeGoogleMerchant::ShippingFeedBuilder.generate_and_transfer
   end

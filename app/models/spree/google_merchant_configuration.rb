@@ -22,5 +22,10 @@ module Spree
     # Bing product ads preferences
     preference :bing_sftp_username, :string, :default => ''
     preference :bing_sftp_password, :password, :default => ''
+
+    preference :linkshare_ftp_username, :string, :default => ''
+    preference :linkshare_ftp_password, :password, :default => ''
+
+
   end
 end

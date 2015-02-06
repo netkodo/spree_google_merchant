@@ -19,9 +19,9 @@ module SpreeGoogleMerchant
       end
     end
 
-    def self.transfer
+    def self.transfer partner = :google
       self.builders.each do |builder|
-        builder.transfer_xml
+        builder.transfer_xml partner
       end
     end
 
@@ -73,7 +73,7 @@ module SpreeGoogleMerchant
     end
 
     def filename
-      "google_merchant_v#{@store.try(:code)}.xml"
+      "data_feed.xml"
     end
 
     def delete_xml_if_exists
@@ -114,13 +114,24 @@ module SpreeGoogleMerchant
       end
     end
 
-    def transfer_xml
-      raise "Please configure your Google Merchant :ftp_username and :ftp_password by configuring Spree::GoogleMerchant::Config" unless
-          Spree::GoogleMerchant::Config[:ftp_username] and Spree::GoogleMerchant::Config[:ftp_password]
+    def transfer_xml partner = :google
+      if partner == :google
+        raise "Please configure your Google Merchant :ftp_username and :ftp_password by configuring Spree::GoogleMerchant::Config" unless
+        Spree::GoogleMerchant::Config[:ftp_username] and Spree::GoogleMerchant::Config[:ftp_password]
+        ftp_domain = 'uploads.google.com'
+        username = Spree::GoogleMerchant::Config[:ftp_username]
+        password = Spree::GoogleMerchant::Config[:ftp_password]
+      elsif partner == :linkshare
+        raise "Please configure your Linkshare :linkshare_ftp_username and :linkshare_ftp_password by configuring Spree::GoogleMerchant::Config" unless
+        Spree::GoogleMerchant::Config[:linkshare_ftp_username] and Spree::GoogleMerchant::Config[:linkshare_ftp_password]
+        ftp_domain = 'ftp.popshops.com'
+        username = Spree::GoogleMerchant::Config[:linkshare_ftp_username]
+        password = Spree::GoogleMerchant::Config[:linkshare_ftp_password]
+      end
 
-      ftp = Net::FTP.new('uploads.google.com')
+      ftp = Net::FTP.new(ftp_domain)
       ftp.passive = true
-      ftp.login(Spree::GoogleMerchant::Config[:ftp_username], Spree::GoogleMerchant::Config[:ftp_password])
+      ftp.login(username, password)
       ftp.put(path, filename)
       ftp.quit
     end
