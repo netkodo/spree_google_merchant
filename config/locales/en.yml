@@ -15,6 +15,7 @@ en:
     bing_sftp_password: "Bing Ads SFTP Password"
     linkshare_ftp_username: "Linkshare FTP Username"
     linkshare_ftp_password: "Linkshare FTP Password"
+    linkshare_ftp_filename: "Linkshare FTP Filename"
   spree:
     product_ad: Product Ad
     new_product_ad: New Product Ad

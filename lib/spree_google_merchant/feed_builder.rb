@@ -127,6 +127,7 @@ module SpreeGoogleMerchant
         ftp_domain = 'ftp.popshops.com'
         username = Spree::GoogleMerchant::Config[:linkshare_ftp_username]
         password = Spree::GoogleMerchant::Config[:linkshare_ftp_password]
+        filename = Spree::GoogleMerchant::Config[:linkshare_ftp_filename]
       end
 
       ftp = Net::FTP.new(ftp_domain)

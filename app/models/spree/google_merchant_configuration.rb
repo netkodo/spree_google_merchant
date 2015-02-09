@@ -25,7 +25,6 @@ module Spree
 
     preference :linkshare_ftp_username, :string, :default => ''
     preference :linkshare_ftp_password, :password, :default => ''
-
-
+    preference :linkshare_ftp_filename, :filename, :default => ''
   end
 end
