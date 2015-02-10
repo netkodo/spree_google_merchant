@@ -55,6 +55,7 @@ module SpreeGoogleMerchant
         generate_xml file
       end
 
+      FileUtils.cp path, path(:linkshare) if Spree::GoogleMerchant::Config[:linkshare_ftp_filename]
     end
 
     def generate_and_transfer_store
@@ -68,8 +69,13 @@ module SpreeGoogleMerchant
       cleanup_xml
     end
 
-    def path
-      "#{::Rails.root}/tmp/#{filename}"
+    def path partner = :google
+      if partner == :linkshare
+        "#{::Rails.root}/tmp/#{Spree::GoogleMerchant::Config[:linkshare_ftp_filename]}"
+      else
+        "#{::Rails.root}/tmp/#{filename}"
+      end
+
     end
 
     def filename
