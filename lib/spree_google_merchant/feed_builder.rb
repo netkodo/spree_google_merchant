@@ -73,7 +73,7 @@ module SpreeGoogleMerchant
       if partner == :linkshare
         "#{::Rails.root}/tmp/#{Spree::GoogleMerchant::Config[:linkshare_ftp_filename]}"
       else
-        "#{::Rails.root}/tmp/#{filename}"
+        "#{::Rails.root}/tmp/#{self.filename}"
       end
 
     end
@@ -127,6 +127,7 @@ module SpreeGoogleMerchant
         ftp_domain = 'uploads.google.com'
         username = Spree::GoogleMerchant::Config[:ftp_username]
         password = Spree::GoogleMerchant::Config[:ftp_password]
+        filename = self.filename
       elsif partner == :linkshare
         raise "Please configure your Linkshare :linkshare_ftp_username and :linkshare_ftp_password by configuring Spree::GoogleMerchant::Config" unless
         Spree::GoogleMerchant::Config[:linkshare_ftp_username] and Spree::GoogleMerchant::Config[:linkshare_ftp_password]
