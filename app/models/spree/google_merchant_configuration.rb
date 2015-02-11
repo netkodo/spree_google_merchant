@@ -23,8 +23,9 @@ module Spree
     preference :bing_sftp_username, :string, :default => ''
     preference :bing_sftp_password, :password, :default => ''
 
-    preference :linkshare_ftp_username, :string, :default => ''
-    preference :linkshare_ftp_password, :password, :default => ''
-    preference :linkshare_ftp_filename, :filename, :default => ''
+    preference :linkshare_ftp_username,              :string, :default => ''
+    preference :linkshare_ftp_password,              :password, :default => ''
+    preference :linkshare_ftp_filename,              :filename, :default => ''
+    preference :linkshare_ftp_cancellation_filename, :filename, :default => ''
   end
 end

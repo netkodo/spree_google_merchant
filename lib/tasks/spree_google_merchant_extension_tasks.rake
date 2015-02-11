@@ -47,6 +47,18 @@ namespace :spree_google_merchant do
     SpreeGoogleMerchant::CancellationFeedBuilder.transfer
   end
 
+  task :generate_and_transfer_cancellation_linkshare => [:environment] do |t,args|
+    SpreeGoogleMerchant::LinkshareCancellationFeedBuilder.generate_and_transfer
+  end
+
+  task :generate_cancellation_linkshare => [:environment] do |t,args|
+    SpreeGoogleMerchant::LinkshareCancellationFeedBuilder.generate
+  end
+
+  task :transfer_cancellation_linkshare => [:environment] do |t,args|
+    SpreeGoogleMerchant::LinkshareCancellationFeedBuilder.transfer
+  end
+
   task :generate_and_transfer_amazon => [:environment] do |t, args|
     SpreeGoogleMerchant::AmazonFeedBuilder.generate_and_transfer
   end
