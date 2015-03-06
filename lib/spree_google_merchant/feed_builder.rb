@@ -163,7 +163,7 @@ module SpreeGoogleMerchant
           xml.tag!('g:size', variant.google_merchant_size)
           build_shipping(xml, product)
           build_adwords_labels(xml, product)
-          #build_custom_labels(xml, product)
+          build_custom_labels(xml, product)
         end
       end if product.google_merchant_available?
     end
@@ -209,13 +209,6 @@ module SpreeGoogleMerchant
     def build_adwords_labels(xml, product)
       labels = []
 
-      taxon = product.taxons.first
-      unless taxon.nil?
-        taxon.self_and_ancestors.each do |taxon|
-          labels << taxon.name
-        end
-      end
-
       list = [:category,:group,:type,:theme,:keyword,:color,:shape,:brand,:size,:material,:for,:agegroup]
       list.each do |prop|
         if labels.length < 10 then
@@ -229,22 +222,11 @@ module SpreeGoogleMerchant
       end
     end
 
-#    def build_custom_labels(xml, product)
-#      # Set availability
-#      xml.tag!('g:custom_label_0', product.google_merchant_availability)
-#
-#      # Set CPC
-#      channel = ad.channel
-#      max_cpc = nil
-#      if ad.max_cpc
-#        max_cpc = ad.max_cpc
-#      elsif ad.variant && ad.variant.max_cpc
-#        max_cpc = ad.variant.max_cpc / 0.65
-#      elsif channel && channel.default_max_cpc
-#        max_cpc = channel.default_max_cpc
-#      end
-#      xml.tag!('g:custom_label_1', '%.2f' % max_cpc) if max_cpc
-#    end
+    def build_custom_labels(xml, product)
+      # Set availability
+      xml.tag!('g:custom_label_0', product.google_merchant_size_type)
+      xml.tag!('g:custom_label_1', product.google_merchant_taxon)
+    end
 
     def build_meta(xml)
       xml.title @title
