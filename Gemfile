@@ -2,11 +2,14 @@ source 'http://rubygems.org'
 
 gemspec
 
-spree_tag = 'v2.1.5'
+spree_branch = '2-1-stable'
 
-gem 'spree_core', git: "git@github.com:Reformation/spree.git", tag: spree_tag
-gem 'spree_api', git: "git@github.com:Reformation/spree.git", tag: spree_tag
-gem 'spree_backend', git: "git@github.com:Reformation/spree.git", tag: spree_tag
-gem 'spree_hub', git: "git@github.com:Reformation/hub_gem.git", branch: 'master'
-gem 'spree_static_content', github: 'spree/spree_static_content', branch: '2-1-stable'
+gem 'spree', github: 'spree/spree', branch: spree_branch
+gem 'spree_hub', github: 'reformation/hub_gem', branch: 'reformation/' + spree_branch
+gem 'spree_static_content', github: 'spree/spree_static_content', branch: spree_branch
 
+group :test do
+  gem 'database_cleaner'
+  gem 'factory_girl_rails'
+  gem 'mocha'
+end

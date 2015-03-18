@@ -45,7 +45,7 @@ module Spree
 #    end
 
     def google_merchant_image_link
-      self.max_image_url
+      self.images.first.try{|i| i.attachment(:product) }
     end
 
  #   def google_merchant_brand
@@ -176,20 +176,20 @@ module Spree
       #   when "Men"
 
       #   when "Women"
-          
+
       # if self.property(:group) == "Costumes"
       #   if self.property(:gender) == "Boys"
       #     727631011
       #   elsif self.property(:gender) == "Girls"
       #     727632011
       #   elsif self.property(:gender) == ""
-          
-      # elsif 
 
-      # elsif 
+      # elsif
 
-      # elsif 
-      ""        
+      # elsif
+
+      # elsif
+      ""
     end
 
     def amazon_department

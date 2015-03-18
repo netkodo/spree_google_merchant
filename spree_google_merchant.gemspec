@@ -26,19 +26,16 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<net-sftp>, ["= 2.1.2"])
       s.add_development_dependency(%q<rspec-rails>, ["~> 2.7"])
       s.add_development_dependency(%q<sqlite3>, [">= 0"])
-      s.add_development_dependency(%q<factory_girl>, ["~> 2.6"])
     else
       s.add_dependency(%q<spree>, ["~> 2.0"])
       s.add_dependency(%q<net-sftp>, ["= 2.1.2"])
       s.add_dependency(%q<rspec-rails>, ["~> 2.7"])
       s.add_dependency(%q<sqlite3>, [">= 0"])
-      s.add_dependency(%q<factory_girl>, ["~> 2.6"])
     end
   else
     s.add_dependency(%q<spree>, ["~> 2.0"])
     s.add_dependency(%q<net-sftp>, ["= 2.1.2"])
     s.add_dependency(%q<rspec-rails>, ["~> 2.7"])
     s.add_dependency(%q<sqlite3>, [">= 0"])
-    s.add_dependency(%q<factory_girl>, ["~> 2.6"])
   end
 end

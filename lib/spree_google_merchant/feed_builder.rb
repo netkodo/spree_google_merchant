@@ -232,6 +232,5 @@ module SpreeGoogleMerchant
       xml.title @title
       xml.link @domain
     end
-
   end
 end
