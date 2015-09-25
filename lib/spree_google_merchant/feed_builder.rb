@@ -225,7 +225,10 @@ module SpreeGoogleMerchant
     def build_custom_labels(xml, product)
       # Set availability
       xml.tag!('g:custom_label_0', product.google_merchant_size_type)
-      xml.tag!('g:custom_label_1', product.google_merchant_taxon)
+      xml.tag!('g:custom_label_1', product.sizes.join(","))
+      xml.tag!('g:custom_label_2', "#{product.variants.select{|v| v.can_stock?}.size}/#{product.variants.size}")
+      xml.tag!('g:custom_label_3', product.taxons.map(&:name).uniq.join(","))
+      xml.tag!('g:custom_label_4', product.final_sale ? 'sale' : 'non-sale')
     end
 
     def build_meta(xml)
