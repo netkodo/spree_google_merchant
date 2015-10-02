@@ -41,7 +41,7 @@ module SpreeGoogleMerchant
 
 
     def self.transfer
-      ftp_domain = 'ftp.popshops.com'
+      ftp_domain = 'mftp.linksynergy.com'
       username = Spree::GoogleMerchant::Config[:linkshare_ftp_username]
       password = Spree::GoogleMerchant::Config[:linkshare_ftp_password]
       filename = Spree::GoogleMerchant::Config[:linkshare_ftp_cancellation_filename]
