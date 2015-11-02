@@ -56,6 +56,7 @@ module SpreeGoogleMerchant
       end
 
       FileUtils.cp path, path(:linkshare) if Spree::GoogleMerchant::Config[:linkshare_ftp_filename]
+      FileUtils.cp path, path(:godatafeed) if Spree::GoogleMerchant::Config[:godatafeed_ftp_filename] && self.filename != Spree::GoogleMerchant::Config[:godatafeed_ftp_filename]
     end
 
     def generate_and_transfer_store
@@ -70,7 +71,9 @@ module SpreeGoogleMerchant
     end
 
     def path partner = :google
-      if partner == :linkshare
+      if partner == :godatafeed
+        "#{::Rails.root}/tmp/#{Spree::GoogleMerchant::Config[:godatafeed_ftp_filename]}"
+      elsif partner == :linkshare
         "#{::Rails.root}/tmp/#{Spree::GoogleMerchant::Config[:linkshare_ftp_filename]}"
       else
         "#{::Rails.root}/tmp/#{self.filename}"
@@ -135,6 +138,12 @@ module SpreeGoogleMerchant
         username = Spree::GoogleMerchant::Config[:linkshare_ftp_username]
         password = Spree::GoogleMerchant::Config[:linkshare_ftp_password]
         filename = Spree::GoogleMerchant::Config[:linkshare_ftp_filename]
+      elsif partner == :godatafeed
+        raise "Please configure your GoDatafeed :godatafeed_ftp_password and :godatafeed_ftp_password by configuring Spree::GoogleMerchant::Config" unless Spree::GoogleMerchant::Config[:godatafeed_ftp_username] and Spree::GoogleMerchant::Config[:godatafeed_ftp_password]
+        ftp_domain = 'ftp.godatafeed.com'
+        username = Spree::GoogleMerchant::Config[:godatafeed_ftp_username]
+        password = Spree::GoogleMerchant::Config[:godatafeed_ftp_password]
+        filename = Spree::GoogleMerchant::Config[:godatafeed_ftp_filename]
       end
 
       ftp = Net::FTP.new(ftp_domain)

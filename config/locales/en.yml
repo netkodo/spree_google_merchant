@@ -17,6 +17,9 @@ en:
     linkshare_ftp_password: "Linkshare FTP Password"
     linkshare_ftp_filename: "Linkshare Product Feed Filename"
     linkshare_ftp_cancellation_filename: "Linkshare Cancellation Feed Filename"
+    godatafeed_ftp_username: "GoDatafeed FTP Username"
+    godatafeed_ftp_password: "GoDatafeed FTP Password"
+    godatafeed_ftp_filename: "GoDatafeed FTP Filename"
   spree:
     product_ad: Product Ad
     new_product_ad: New Product Ad
