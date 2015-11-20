@@ -9,26 +9,30 @@ module SpreeGoogleMerchant
 
       # See http://support.google.com/merchants/bin/answer.py?hl=en&answer=188494#US for all other fields
       SpreeGoogleMerchant::FeedBuilder::GOOGLE_MERCHANT_ATTR_MAP = [
-          ['g:item_group_id', 'item_group_id'],
+ #         ['g:id', 'id'],
+#	  ['title', 'title'],
+#	  ['description', 'description'],
+	  ['g:google_product_category','product_category'],
+	  ['g:product_type', 'product_type'],
 #          ['g:gtin','gtin'],
 #          ['g:mpn', 'mpn'],
           ['title', 'title'],
-          ['description', 'description'],
+         # ['description', 'description'],
           ['g:price', 'price'],
 #          ['g:sale_price','sale_price'],
 #          ['g:sale_price_effective_date','sale_price_effective_date'],
           ['g:condition', 'condition'],
-          ['g:product_type', 'product_type'],
-          ['g:brand', 'brand'],
-          ['g:image_link','image_link'],
-          ['g:google_product_category','product_category'],
+        #  ['g:product_type', 'product_type'],
+#          ['g:brand', 'brand'],
+#          ['g:image_link','image_link'],
+         # ['g:google_product_category','product_category'],
 #          ['g:shipping_weight','shipping_weight'],
-          ['g:adult','adult'],
-          ['g:gender','gender'],
-          ['g:age_group','age_group'],
+#          ['g:adult','adult'],
+#          ['g:gender','gender'],
+#          ['g:age_group','age_group'],
           ['g:color','color'],
           ['g:size_type','size_type'],
-          ['g:adwords_grouping','adwords_group']
+#          ['g:adwords_grouping','adwords_group']
       ]
     end
 

@@ -2,8 +2,12 @@ require 'net/ftp'
 
 module SpreeGoogleMerchant
   class FeedBuilder
-#    include Spree::Core::Engine.routes.url_helpers
+    include Spree::Core::Engine.routes.url_helpers
     include Rails.application.routes.url_helpers
+
+#  def self.default_url_options
+ #   ActionMailer::Base.default_url_options
+ # end
 
     attr_reader :store, :domain, :title
 
@@ -73,13 +77,13 @@ module SpreeGoogleMerchant
       if partner == :linkshare
         "#{::Rails.root}/tmp/#{Spree::GoogleMerchant::Config[:linkshare_ftp_filename]}"
       else
-        "#{::Rails.root}/tmp/#{self.filename}"
+        "#{::Rails.root}/public/#{self.filename}"
       end
 
     end
 
     def filename
-      "data_feed.xml"
+      "google_shopping.xml"
     end
 
     def delete_xml_if_exists
@@ -151,19 +155,21 @@ module SpreeGoogleMerchant
     def build_feed_item(xml, product)
       product.variants.each do |variant|
         xml.item do
-          xml.tag!('link', products_url(product.permalink, host: Spree::Config.site_url.gsub(/\/$/,''), protocol: 'https'))
+          xml.tag!('link', "https://#{Spree::Config.site_url.gsub(/\/$/,'')}/products/#{product.slug}")
           build_images(xml, product)
+          #xml.tag!('link', products_url(product.slug, host: Spree::Config.site_url.gsub(/\/$/,''), protocol: 'https'))
 
           GOOGLE_MERCHANT_ATTR_MAP.each do |k, v|
             value = product.send("google_merchant_#{v}")
             xml.tag!(k, value.to_s) if value.present?
           end
-          xml.tag!('g:availability', variant.google_merchant_availability)
+          xml.tag!('g:availability', 'in stock')
           xml.tag!('g:id', variant.sku)
-          xml.tag!('g:size', variant.google_merchant_size)
-          build_shipping(xml, product)
-          build_adwords_labels(xml, product)
-          build_custom_labels(xml, product)
+	  xml.tag!('description', product.description)
+#          xml.tag!('g:size', variant.google_merchant_size)
+#          build_shipping(xml, product)
+#          build_adwords_labels(xml, product)
+#          build_custom_labels(xml, product)
         end
       end # if product.google_merchant_available?
     end
@@ -181,7 +187,7 @@ module SpreeGoogleMerchant
 
     def image_url image
       base_url = image.attachment.url(:product)
-      base_url = "#{domain}/#{base_url}" unless Spree::Config[:use_s3]
+      #base_url = "#{domain}/#{base_url}" unless Spree::Config[:use_s3]
 
       base_url
     end
@@ -229,7 +235,7 @@ module SpreeGoogleMerchant
     end
 
     def build_meta(xml)
-      xml.title @title
+      xml.title Spree::GoogleMerchant::Config[:store_name]
       xml.link @domain
     end
 
