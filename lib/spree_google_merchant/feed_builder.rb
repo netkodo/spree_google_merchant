@@ -92,7 +92,7 @@ module SpreeGoogleMerchant
       #return false if product.google_merchant_product_category.nil?
       #return false if product.google_merchant_availability.nil?
       return false if product.google_merchant_price.nil? || product.google_merchant_price.to_i == 0
-      return false if product.google_merchant_brand.nil?
+      #return false if product.google_merchant_brand.nil?
       #return false if product.google_merchant_gtin.nil?
       #return false if product.google_merchant_mpn.nil?
       #return false unless validate_upc(product.upc)
