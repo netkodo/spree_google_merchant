@@ -48,9 +48,9 @@ module Spree
       self.max_image_url
     end
 
- #   def google_merchant_brand
- #     self.google_merchant_property(:brand)
- #   end
+   def google_merchant_brand
+     self.google_merchant_property(:brand)
+   end
 
     # <g:price> 15.00 USD
     def google_merchant_price

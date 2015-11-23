@@ -116,8 +116,8 @@ module SpreeGoogleMerchant
         xml.channel do
           build_meta(xml)
           @assets = Spree::Asset.all
-          Spree::Product.includes(:taxons, :product_properties, :properties, :option_types, variants_including_master: [:default_price, :prices, :images, option_values: :option_type]).find_each(batch_size: 1000) do |product|
-          # Spree::Product.includes(:taxons, :product_properties, :properties, :option_types, variants_including_master: [:default_price, :prices, :images, option_values: :option_type]).limit(100).each do |product|
+          # Spree::Product.includes(:taxons, :product_properties, :properties, :option_types, variants_including_master: [:default_price, :prices, :images, option_values: :option_type]).find_each(batch_size: 1000) do |product|
+          Spree::Product.includes(:taxons, :product_properties, :properties, :option_types, variants_including_master: [:default_price, :prices, :images, option_values: :option_type]).limit(100).each do |product|
             next unless product && product.variants && validate_record(product)
             build_feed_item(xml, product)
           end
@@ -167,14 +167,22 @@ module SpreeGoogleMerchant
           xml.tag!('g:availability', 'in stock')
           xml.tag!('g:id', variant.id)
           xml.tag!('g:mpn', variant.id)
-          xml.tag!('description', product.description)
-          xml.tag!('g:product_type', product.send("google_merchant_product_type").gsub(ERB::Util::HTML_ESCAPE_ONCE_REGEXP, ERB::Util::HTML_ESCAPE))
-#          xml.tag!('g:size', variant.google_merchant_size)
+          build_product_type(xml, product)
+          build_brand(xml, product)
           build_shipping(xml, product)
           # build_adwords_labels(xml, product)
 #          build_custom_labels(xml, product)
         end
       end # if product.google_merchant_available?
+    end
+
+    def build_brand(xml, product)
+      value = product.send("google_merchant_brand") || "Scout & Nimble"
+      xml.tag!('g:brand', value)
+    end
+
+    def build_product_type(xml, product)
+
     end
 
     def build_images(xml, product)
