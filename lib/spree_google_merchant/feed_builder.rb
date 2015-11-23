@@ -42,7 +42,7 @@ module SpreeGoogleMerchant
           opts[:store].present? or (opts[:path].present? or Spree::GoogleMerchant::Config[:public_domain])
 
       @store = opts[:store] if opts[:store].present?
-      @title = @store ? @store.name : Spree::GoogleMerchant::Config[:store_name]
+      @title = @store ? @store.name : Spree::GoogleMerchant::Config[:title]
 
       @domain = @store ? @store.domains.match(/[\w\.]+/).to_s : opts[:path]
       @domain ||= Spree::GoogleMerchant::Config[:public_domain]
@@ -116,8 +116,8 @@ module SpreeGoogleMerchant
         xml.channel do
           build_meta(xml)
           @assets = Spree::Asset.all
-          # Spree::Product.includes(:taxons, :product_properties, :properties, :option_types, variants_including_master: [:default_price, :prices, :images, option_values: :option_type]).find_each(batch_size: 1000) do |product|
-          Spree::Product.includes(:taxons, :product_properties, :properties, :option_types, variants_including_master: [:default_price, :prices, :images, option_values: :option_type]).limit(100).each do |product|
+          Spree::Product.includes(:taxons, :product_properties, :properties, :option_types, variants_including_master: [:default_price, :prices, :images, option_values: :option_type]).find_each(batch_size: 1000) do |product|
+          # Spree::Product.includes(:taxons, :product_properties, :properties, :option_types, variants_including_master: [:default_price, :prices, :images, option_values: :option_type]).limit(100).each do |product|
             next unless product && product.variants && validate_record(product)
             build_feed_item(xml, product)
           end
@@ -246,7 +246,7 @@ module SpreeGoogleMerchant
     end
 
     def build_meta(xml)
-      xml.title Spree::GoogleMerchant::Config[:store_name]
+      xml.title @title
       xml.link @domain
     end
 
