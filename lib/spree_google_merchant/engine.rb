@@ -10,10 +10,10 @@ module SpreeGoogleMerchant
       # See http://support.google.com/merchants/bin/answer.py?hl=en&answer=188494#US for all other fields
       SpreeGoogleMerchant::FeedBuilder::GOOGLE_MERCHANT_ATTR_MAP = [
  #         ['g:id', 'id'],
-#	  ['title', 'title'],
-#	  ['description', 'description'],
-	  ['g:google_product_category','product_category'],
-	  ['g:product_type', 'product_type'],
+        #	  ['title', 'title'],
+        #	  ['description', 'description'],
+            ['g:google_product_category','product_category'],
+            # ['g:product_type', 'product_type'],
 #          ['g:gtin','gtin'],
 #          ['g:mpn', 'mpn'],
           ['title', 'title'],
@@ -30,8 +30,8 @@ module SpreeGoogleMerchant
 #          ['g:adult','adult'],
 #          ['g:gender','gender'],
 #          ['g:age_group','age_group'],
-          ['g:color','color'],
-          ['g:size_type','size_type'],
+#           ['g:color','color'],
+#           ['g:size_type','size_type'],
 #          ['g:adwords_grouping','adwords_group']
       ]
     end
