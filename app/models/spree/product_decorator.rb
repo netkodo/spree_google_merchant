@@ -13,7 +13,8 @@ module Spree
     end
 
     def google_merchant_description
-      self.description
+      return nil if self.description.blank?
+      self.description.gsub(/<("[^"]*"|'[^']*'|[^'">])*>/, "")
     end
 
     def google_merchant_title
