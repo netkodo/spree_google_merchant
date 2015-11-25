@@ -171,7 +171,7 @@ module SpreeGoogleMerchant
           build_brand(xml, product)
           build_shipping(xml, product)
           # build_adwords_labels(xml, product)
-#          build_custom_labels(xml, product)
+          build_custom_labels(xml, product)
         end
       end # if product.google_merchant_available?
     end
@@ -241,8 +241,9 @@ module SpreeGoogleMerchant
 
     def build_custom_labels(xml, product)
       # Set availability
-      xml.tag!('g:custom_label_0', product.google_merchant_size_type)
-      xml.tag!('g:custom_label_1', product.google_merchant_taxon)
+      xml.tag!('g:custom_label_0', 'sale') if product.sale_taxon?
+      # xml.tag!('g:custom_label_0', product.google_merchant_size_type)
+      # xml.tag!('g:custom_label_1', product.google_merchant_taxon)
     end
 
     def build_meta(xml)

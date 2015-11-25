@@ -36,6 +36,10 @@ module Spree
       'new'
     end
 
+    def sale_taxon?
+      taxons.where(permalink: 'department/sale').present?
+    end
+
     # <g:availability> in stock | available for order | out of stock | preorder
 #    def google_merchant_availability
 #      self.master.stock_items.sum(:count_on_hand) > 0 ? 'in stock' : 'out of stock'
