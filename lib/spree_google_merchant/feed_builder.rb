@@ -6,8 +6,8 @@ module SpreeGoogleMerchant
     include Rails.application.routes.url_helpers
 
 #  def self.default_url_options
- #   ActionMailer::Base.default_url_options
- # end
+#   ActionMailer::Base.default_url_options
+# end
 
     attr_reader :store, :domain, :title
 
@@ -31,15 +31,14 @@ module SpreeGoogleMerchant
 
     def self.builders
       if defined?(Spree::Store)
-        Spree::Store.all.map{ |store| self.new(:store => store) }
+        Spree::Store.all.map { |store| self.new(:store => store) }
       else
         [self.new]
       end
     end
 
     def initialize(opts = {})
-      raise "Please pass a public address as the second argument, or configure :public_path in Spree::GoogleMerchant::Config" unless
-          opts[:store].present? or (opts[:path].present? or Spree::GoogleMerchant::Config[:public_domain])
+      raise "Please pass a public address as the second argument, or configure :public_path in Spree::GoogleMerchant::Config" unless opts[:store].present? or (opts[:path].present? or Spree::GoogleMerchant::Config[:public_domain])
 
       @store = opts[:store] if opts[:store].present?
       @title = @store ? @store.name : Spree::GoogleMerchant::Config[:title]
@@ -91,7 +90,7 @@ module SpreeGoogleMerchant
     end
 
     def validate_record(product)
-      return false if @assets.select{|s| s.viewable_id == product.master.id}.length == 0 rescue true
+      return false if @assets.select { |s| s.viewable_id == product.master.id }.length == 0 rescue true
       return false if product.google_merchant_title.nil?
       #return false if product.google_merchant_product_category.nil?
       #return false if product.google_merchant_availability.nil?
@@ -117,7 +116,7 @@ module SpreeGoogleMerchant
           build_meta(xml)
           @assets = Spree::Asset.all
           Spree::Product.includes(:taxons, :product_properties, :properties, :option_types, variants_including_master: [:default_price, :prices, :images, option_values: :option_type]).find_each(batch_size: 1000) do |product|
-          # Spree::Product.includes(:taxons, :product_properties, :properties, :option_types, variants_including_master: [:default_price, :prices, :images, option_values: :option_type]).limit(1000).each do |product|
+            # Spree::Product.includes(:taxons, :product_properties, :properties, :option_types, variants_including_master: [:default_price, :prices, :images, option_values: :option_type]).limit(1000).each do |product|
             next unless product && product.variants && validate_record(product)
             build_feed_item(xml, product)
           end
@@ -127,15 +126,13 @@ module SpreeGoogleMerchant
 
     def transfer_xml partner = :google
       if partner == :google
-        raise "Please configure your Google Merchant :ftp_username and :ftp_password by configuring Spree::GoogleMerchant::Config" unless
-        Spree::GoogleMerchant::Config[:ftp_username] and Spree::GoogleMerchant::Config[:ftp_password]
+        raise "Please configure your Google Merchant :ftp_username and :ftp_password by configuring Spree::GoogleMerchant::Config" unless Spree::GoogleMerchant::Config[:ftp_username] and Spree::GoogleMerchant::Config[:ftp_password]
         ftp_domain = 'uploads.google.com'
         username = Spree::GoogleMerchant::Config[:ftp_username]
         password = Spree::GoogleMerchant::Config[:ftp_password]
         filename = self.filename
       elsif partner == :linkshare
-        raise "Please configure your Linkshare :linkshare_ftp_username and :linkshare_ftp_password by configuring Spree::GoogleMerchant::Config" unless
-        Spree::GoogleMerchant::Config[:linkshare_ftp_username] and Spree::GoogleMerchant::Config[:linkshare_ftp_password]
+        raise "Please configure your Linkshare :linkshare_ftp_username and :linkshare_ftp_password by configuring Spree::GoogleMerchant::Config" unless Spree::GoogleMerchant::Config[:linkshare_ftp_username] and Spree::GoogleMerchant::Config[:linkshare_ftp_password]
         ftp_domain = 'ftp.popshops.com'
         username = Spree::GoogleMerchant::Config[:linkshare_ftp_username]
         password = Spree::GoogleMerchant::Config[:linkshare_ftp_password]
@@ -156,7 +153,7 @@ module SpreeGoogleMerchant
     def build_feed_item(xml, product)
       product.variants.each do |variant|
         xml.item do
-          xml.tag!('link', "https://#{Spree::Config.site_url.gsub(/\/$/,'')}/products/#{product.slug}")
+          xml.tag!('link', "https://#{Spree::Config.site_url.gsub(/\/$/, '')}/products/#{product.slug}")
           build_images(xml, product)
           #xml.tag!('link', products_url(product.slug, host: Spree::Config.site_url.gsub(/\/$/,''), protocol: 'https'))
 
@@ -182,7 +179,7 @@ module SpreeGoogleMerchant
     end
 
     def build_product_type(xml, product)
-
+      xml.tag!('product_type', product.google_merchant_product_type)
     end
 
     def build_images(xml, product)
@@ -215,18 +212,18 @@ module SpreeGoogleMerchant
 #      ((10 - check % 10) % 10) == digits.last.to_i
 #    end
 
-    # <g:shipping>
+# <g:shipping>
     def build_shipping(xml, product)
       xml.tag!('g:shipping') do
         xml.tag!('g:price', "0.00 USD")
       end
     end
 
-    # <g:adwords_labels>
+# <g:adwords_labels>
     def build_adwords_labels(xml, product)
       labels = []
 
-      list = [:category,:group,:type,:theme,:keyword,:color,:shape,:brand,:size,:material,:for,:agegroup]
+      list = [:category, :group, :type, :theme, :keyword, :color, :shape, :brand, :size, :material, :for, :agegroup]
       list.each do |prop|
         if labels.length < 10 then
           value = product.google_merchant_property(prop)
