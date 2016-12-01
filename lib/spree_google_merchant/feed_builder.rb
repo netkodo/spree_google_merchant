@@ -158,7 +158,7 @@ module SpreeGoogleMerchant
           #xml.tag!('link', products_url(product.slug, host: Spree::Config.site_url.gsub(/\/$/,''), protocol: 'https'))
 
           GOOGLE_MERCHANT_ATTR_MAP.each do |k, v|
-            value = product.send("google_merchant_#{v}")
+            k == 'g:price' ? value = variant.send("google_merchant_#{v}") : value = product.send("google_merchant_#{v}")
             xml.tag!(k, value.to_s) if value.present?
           end
           xml.tag!('g:availability', 'in stock')
