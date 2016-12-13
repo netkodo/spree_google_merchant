@@ -151,26 +151,49 @@ module SpreeGoogleMerchant
     end
 
     def build_feed_item(xml, product)
-      product.variants.each do |variant|
-        xml.item do
-          xml.tag!('link', "https://#{Spree::Config.site_url.gsub(/\/$/, '')}/products/#{product.slug}")
-          build_images(xml, product)
-          #xml.tag!('link', products_url(product.slug, host: Spree::Config.site_url.gsub(/\/$/,''), protocol: 'https'))
+      if product.variants.present?
+        product.variants.each do |variant|
+          xml.item do
+            xml.tag!('link', "https://#{Spree::Config.site_url.gsub(/\/$/, '')}/products/#{product.slug}")
+            build_images(xml, product)
+            #xml.tag!('link', products_url(product.slug, host: Spree::Config.site_url.gsub(/\/$/,''), protocol: 'https'))
 
-          GOOGLE_MERCHANT_ATTR_MAP.each do |k, v|
-            k == 'g:price' ? value = variant.send("google_merchant_#{v}") : value = product.send("google_merchant_#{v}")
-            xml.tag!(k, value.to_s) if value.present?
+            GOOGLE_MERCHANT_ATTR_MAP.each do |k, v|
+              k == 'g:price' ? value = variant.send("google_merchant_#{v}") : value = product.send("google_merchant_#{v}")
+              xml.tag!(k, value.to_s) if value.present?
+            end
+            xml.tag!('g:availability', 'in stock')
+            xml.tag!('g:id', variant.id)
+            xml.tag!('g:mpn', variant.id)
+            build_product_type(xml, product)
+            build_brand(xml, product)
+            build_shipping(xml, product)
+            # build_adwords_labels(xml, product)
+            build_custom_labels(xml, product)
           end
-          xml.tag!('g:availability', 'in stock')
-          xml.tag!('g:id', variant.id)
-          xml.tag!('g:mpn', variant.id)
-          build_product_type(xml, product)
-          build_brand(xml, product)
-          build_shipping(xml, product)
-          # build_adwords_labels(xml, product)
-          build_custom_labels(xml, product)
+        end # if product.google_merchant_available?
+      else
+        product.variants_including_master.each do |variant|
+          xml.item do
+            xml.tag!('link', "https://#{Spree::Config.site_url.gsub(/\/$/, '')}/products/#{product.slug}")
+            build_images(xml, product)
+            #xml.tag!('link', products_url(product.slug, host: Spree::Config.site_url.gsub(/\/$/,''), protocol: 'https'))
+
+            GOOGLE_MERCHANT_ATTR_MAP.each do |k, v|
+              k == 'g:price' ? value = variant.send("google_merchant_#{v}") : value = product.send("google_merchant_#{v}")
+              xml.tag!(k, value.to_s) if value.present?
+            end
+            xml.tag!('g:availability', 'in stock')
+            xml.tag!('g:id', variant.id)
+            xml.tag!('g:mpn', variant.id)
+            build_product_type(xml, product)
+            build_brand(xml, product)
+            build_shipping(xml, product)
+            # build_adwords_labels(xml, product)
+            build_custom_labels(xml, product)
+          end
         end
-      end # if product.google_merchant_available?
+      end
     end
 
     def build_brand(xml, product)
