@@ -261,7 +261,7 @@ module SpreeGoogleMerchant
 
     def build_custom_labels(xml, product)
       # Set availability
-      xml.tag!('g:custom_​​label_​​0', (product.shipping_category.present? and product.shipping_category.name == "Freight Shipping") ? 'freight' : 'small parcel')
+      xml.tag!('g:custom_label_0', (product.shipping_category.present? and product.shipping_category.name == "Freight Shipping") ? 'freight' : 'small parcel')
       xml.tag!('g:custom_label_1', 'sale') if product.sale_taxon?
       # xml.tag!('g:custom_label_0', product.google_merchant_size_type)
       # xml.tag!('g:custom_label_1', product.google_merchant_taxon)
