@@ -76,7 +76,8 @@ module SpreeGoogleMerchant
       if partner == :linkshare
         "#{::Rails.root}/tmp/#{Spree::GoogleMerchant::Config[:linkshare_ftp_filename]}"
       else
-        "#{::Rails.root}/public/#{self.filename}"
+        #"#{::Rails.root}/public/#{self.filename}"
+        "/home/hosting/scoutandnimble/shared/public/#{self.filename}"
       end
 
     end
