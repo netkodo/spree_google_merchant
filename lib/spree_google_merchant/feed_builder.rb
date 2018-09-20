@@ -170,7 +170,7 @@ module SpreeGoogleMerchant
             # build_brand(xml, product)
             build_shipping(xml, product)
             # build_adwords_labels(xml, product)
-            build_custom_labels(xml, product)
+            build_custom_labels(xml, product, variant)
           end
         end # if product.google_merchant_available?
       else
@@ -192,7 +192,7 @@ module SpreeGoogleMerchant
             # build_brand(xml, product)
             build_shipping(xml, product)
             # build_adwords_labels(xml, product)
-            build_custom_labels(xml, product)
+            build_custom_labels(xml, product, variant)
           end
         end
       end
@@ -261,12 +261,26 @@ module SpreeGoogleMerchant
       end
     end
 
-    def build_custom_labels(xml, product)
+    def build_custom_labels(xml, product, variant)
       # Set availability
       xml.tag!('g:custom_label_0', (product.shipping_category.present? and product.shipping_category.name == "Freight Shipping") ? 'freight' : 'small parcel')
       xml.tag!('g:custom_label_1', 'sale') if product.sale_taxon?
+      xml.tag!('g:custom_label_3', define_price_tier(variant)) if variant.present?
       # xml.tag!('g:custom_label_0', product.google_merchant_size_type)
       # xml.tag!('g:custom_label_1', product.google_merchant_taxon)
+    end
+
+    def define_price_tier(variant)
+      case variant.price
+      when 0..300
+        "tier 1"
+      when 300..600
+        "tier 2"
+      when 600..900
+        "tier 3"
+      else
+        "tier 4"
+      end
     end
 
     def build_meta(xml)
