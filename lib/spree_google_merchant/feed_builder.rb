@@ -76,7 +76,9 @@ module SpreeGoogleMerchant
       if partner == :linkshare
         "#{::Rails.root}/tmp/#{Spree::GoogleMerchant::Config[:linkshare_ftp_filename]}"
       else
-        "#{::Rails.root}/public/#{self.filename}"
+        # "#{::Rails.root}/public/#{self.filename}"
+        "/home/hosting/scoutandnimble/shared/public/#{self.filename}"
+
       end
 
     end
@@ -265,6 +267,7 @@ module SpreeGoogleMerchant
       # Set availability
       xml.tag!('g:custom_label_0', (product.shipping_category.present? and product.shipping_category.name == "Freight Shipping") ? 'freight' : 'small parcel')
       xml.tag!('g:custom_label_1', 'sale') if product.sale_taxon?
+      xml.tag!('g:custom_label_2', product.brand.present? ? product.brand.name : "Scout & Nimble")
       xml.tag!('g:custom_label_3', define_price_tier(variant)) if variant.present?
       # xml.tag!('g:custom_label_0', product.google_merchant_size_type)
       # xml.tag!('g:custom_label_1', product.google_merchant_taxon)
