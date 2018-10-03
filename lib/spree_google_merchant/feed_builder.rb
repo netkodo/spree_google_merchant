@@ -117,7 +117,7 @@ module SpreeGoogleMerchant
         xml.channel do
           build_meta(xml)
           @assets = Spree::Asset.all
-          Spree::Product.where("deleted_at IS NULL OR deleted_at >= ?", Time.zone.now).includes(:taxons, :product_properties, :properties, :option_types, variants_including_master: [:default_price, :prices, :images, option_values: :option_type]).find_each(batch_size: 1000) do |product|
+          Spree::Product.where("deleted_at IS NULL OR deleted_at >= ?", Time.zone.now).includes(:taxons, :product_properties, :properties, :option_types, variants_including_master: [:default_price, :prices, :images, option_values: :option_type]).find_each(batch_size: 400) do |product|
             # Spree::Product.includes(:taxons, :product_properties, :properties, :option_types, variants_including_master: [:default_price, :prices, :images, option_values: :option_type]).limit(1000).each do |product|
             next unless product && product.variants && validate_record(product)
             build_feed_item(xml, product)
