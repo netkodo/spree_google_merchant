@@ -92,7 +92,7 @@ module SpreeGoogleMerchant
     end
 
     def validate_record(product)
-      return false if @assets.select { |s| s.viewable_id == product.master.id }.length == 0 rescue true
+      # return false if @assets.select { |s| s.viewable_id == product.master.id }.length == 0 rescue true
       return false if product.google_merchant_title.nil?
       #return false if product.google_merchant_product_category.nil?
       #return false if product.google_merchant_availability.nil?
@@ -119,7 +119,7 @@ module SpreeGoogleMerchant
           @assets = Spree::Asset.all
           Spree::Product.where("deleted_at IS NULL OR deleted_at >= ?", Time.zone.now).includes(:taxons, :product_properties, :properties, :option_types, variants_including_master: [:default_price, :prices, :images, option_values: :option_type]).find_each(batch_size: 400) do |product|
             # Spree::Product.includes(:taxons, :product_properties, :properties, :option_types, variants_including_master: [:default_price, :prices, :images, option_values: :option_type]).limit(1000).each do |product|
-            next unless product && product.variants && validate_record(product)
+            next unless product && validate_record(product) # product.variants &&
             build_feed_item(xml, product)
           end
         end
