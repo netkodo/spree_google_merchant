@@ -269,8 +269,19 @@ module SpreeGoogleMerchant
       xml.tag!('g:custom_label_1', 'sale') if product.sale_taxon?
       xml.tag!('g:custom_label_2', product.brand.present? ? product.brand.name : "Scout & Nimble")
       xml.tag!('g:custom_label_3', define_price_tier(variant)) if variant.present?
+      xml.tag!('g:custom_label_4', define_backorderable_custom(product, variant))
       # xml.tag!('g:custom_label_0', product.google_merchant_size_type)
       # xml.tag!('g:custom_label_1', product.google_merchant_taxon)
+    end
+
+    def define_backorderable_custom(product, variant)
+      value = "not backorderable"
+      if variant.present? && variant.backorderable
+          value = "backorderable"
+      elsif product.master.backorderable
+        value = "backorderable"
+      end
+      value
     end
 
     def define_price_tier(variant)
