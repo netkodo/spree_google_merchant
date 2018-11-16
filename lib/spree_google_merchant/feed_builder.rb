@@ -275,11 +275,23 @@ module SpreeGoogleMerchant
     end
 
     def define_backorderable_custom(product, variant)
-      value = "not backorderable"
-      if variant.present? && variant.backorderable
+      value = ""
+      if variant.present?
+        if variant.stock_items.sum(&:count_on_hand) > 0
+          value = "in stock"
+        elsif variant.backorderable
           value = "backorderable"
-      elsif product.master.backorderable
-        value = "backorderable"
+        else
+          value = "out of stock"
+        end
+      else
+        if product.master.stock_items.sum(&:count_on_hand) > 0
+          value = "in stock"
+        elsif product.master.backorderable
+          value = "backorderable"
+        else
+          value = "out of stock"
+        end
       end
       value
     end
