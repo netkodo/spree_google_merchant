@@ -15,7 +15,8 @@ Spree::Variant.class_eval do
 #  end
 # <g:price> 15.00 USD
   def google_merchant_price
-    format("%.2f %s", self.price, self.currency).to_s
+    price = (self.product.sale_display and self.sale_price.present?) ? self.sale_price : self.price
+    format("%.2f %s", price, self.currency).to_s
   end
 
 end
