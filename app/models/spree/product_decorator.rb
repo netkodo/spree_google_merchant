@@ -59,8 +59,7 @@ module Spree
 
     # <g:price> 15.00 USD
     def google_merchant_price
-      price = (self.sale_display and self.sale_price.present?) ? self.sale_price : self.price
-      format("%.2f %s", price, self.currency).to_s
+      format("%.2f %s", self.price, self.currency).to_s
     end
 
     # <g:sale_price> 15.00 USD

@@ -164,6 +164,7 @@ module SpreeGoogleMerchant
               k == 'g:price' ? value = variant.send("google_merchant_#{v}") : value = product.send("google_merchant_#{v}")
               xml.tag!(k, value.to_s) if value.present?
             end
+            xml.tag!('g:sale_price', variant.google_merchant_sale_price)
             xml.tag!('g:availability', 'in stock')
             xml.tag!('g:id', variant.id)
             # xml.tag!('g:mpn', variant.id)
@@ -186,6 +187,7 @@ module SpreeGoogleMerchant
               k == 'g:price' ? value = variant.send("google_merchant_#{v}") : value = product.send("google_merchant_#{v}")
               xml.tag!(k, value.to_s) if value.present?
             end
+            xml.tag!('g:sale_price', variant.google_merchant_sale_price)
             xml.tag!('g:availability', 'in stock')
             xml.tag!('g:id', variant.id)
             # xml.tag!('g:mpn', variant.id)
