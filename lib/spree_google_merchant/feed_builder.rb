@@ -165,6 +165,9 @@ module SpreeGoogleMerchant
               xml.tag!(k, value.to_s) if value.present?
             end
             xml.tag!('g:sale_price', variant.google_merchant_sale_price)
+            if variant.start_sale_date and variant.end_sale_date
+              xml.tag!('g:sale_price_effective_data', "#{variant.start_sale_date.strftime('%Y-%m-%dT%I-%M%z')}/#{variant.end_sale_date.strftime('%Y-%m-%dT%I-%M%z')}")
+            end
             xml.tag!('g:availability', 'in stock')
             xml.tag!('g:id', variant.id)
             # xml.tag!('g:mpn', variant.id)
@@ -188,6 +191,9 @@ module SpreeGoogleMerchant
               xml.tag!(k, value.to_s) if value.present?
             end
             xml.tag!('g:sale_price', variant.google_merchant_sale_price)
+            if variant.start_sale_date and variant.end_sale_date
+              xml.tag!('g:sale_price_effective_data', "#{variant.start_sale_date.strftime('%Y-%m-%dT%I-%M%z')}/#{variant.end_sale_date.strftime('%Y-%m-%dT%I-%M%z')}")
+            end
             xml.tag!('g:availability', 'in stock')
             xml.tag!('g:id', variant.id)
             # xml.tag!('g:mpn', variant.id)
