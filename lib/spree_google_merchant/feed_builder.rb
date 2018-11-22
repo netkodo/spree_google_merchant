@@ -164,9 +164,11 @@ module SpreeGoogleMerchant
               k == 'g:price' ? value = variant.send("google_merchant_#{v}") : value = product.send("google_merchant_#{v}")
               xml.tag!(k, value.to_s) if value.present?
             end
-            xml.tag!('g:sale_price', variant.google_merchant_sale_price)
-            if variant.start_sale_date and variant.end_sale_date
-              xml.tag!('g:sale_price_effective_data', "#{variant.start_sale_date.strftime('%Y-%m-%dT%I-%M%z')}/#{variant.end_sale_date.strftime('%Y-%m-%dT%I-%M%z')}")
+            if variant.product.sale_display and variant.sale_price.present?
+              xml.tag!('g:sale_price', variant.google_merchant_sale_price)
+              if variant.start_sale_date and variant.end_sale_date
+                xml.tag!('g:sale_price_effective_data', "#{variant.start_sale_date.strftime('%Y-%m-%dT%I-%M%z')}/#{variant.end_sale_date.strftime('%Y-%m-%dT%I-%M%z')}")
+              end
             end
             xml.tag!('g:availability', 'in stock')
             xml.tag!('g:id', variant.id)
@@ -190,9 +192,11 @@ module SpreeGoogleMerchant
               k == 'g:price' ? value = variant.send("google_merchant_#{v}") : value = product.send("google_merchant_#{v}")
               xml.tag!(k, value.to_s) if value.present?
             end
-            xml.tag!('g:sale_price', variant.google_merchant_sale_price)
-            if variant.start_sale_date and variant.end_sale_date
-              xml.tag!('g:sale_price_effective_data', "#{variant.start_sale_date.strftime('%Y-%m-%dT%I-%M%z')}/#{variant.end_sale_date.strftime('%Y-%m-%dT%I-%M%z')}")
+            if variant.product.sale_display and variant.sale_price.present?
+              xml.tag!('g:sale_price', variant.google_merchant_sale_price)
+              if variant.start_sale_date and variant.end_sale_date
+                xml.tag!('g:sale_price_effective_data', "#{variant.start_sale_date.strftime('%Y-%m-%dT%I-%M%z')}/#{variant.end_sale_date.strftime('%Y-%m-%dT%I-%M%z')}")
+              end
             end
             xml.tag!('g:availability', 'in stock')
             xml.tag!('g:id', variant.id)
