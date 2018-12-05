@@ -153,61 +153,31 @@ module SpreeGoogleMerchant
     end
 
     def build_feed_item(xml, product)
-      if product.variants.present?
-        product.variants.each do |variant|
-          xml.item do
-            xml.tag!('link', "https://#{Spree::Config.site_url.gsub(/\/$/, '')}/products/#{product.slug}")
-            build_images(xml, product)
-            #xml.tag!('link', products_url(product.slug, host: Spree::Config.site_url.gsub(/\/$/,''), protocol: 'https'))
+      (product.variants.present? ? product.variants : product.variants_including_master).each do |variant|
+        xml.item do
+          xml.tag!('link', "https://#{Spree::Config.site_url.gsub(/\/$/, '')}/products/#{product.slug}")
+          build_images(xml, product)
+          #xml.tag!('link', products_url(product.slug, host: Spree::Config.site_url.gsub(/\/$/,''), protocol: 'https'))
 
-            GOOGLE_MERCHANT_ATTR_MAP.each do |k, v|
-              k == 'g:price' ? value = variant.send("google_merchant_#{v}") : value = product.send("google_merchant_#{v}")
-              xml.tag!(k, value.to_s) if value.present?
-            end
-            if variant.product.sale_display and variant.sale_price.present?
-              xml.tag!('g:sale_price', variant.google_merchant_sale_price)
-              if variant.start_sale_date and variant.end_sale_date
-                xml.tag!('g:sale_price_effective_data', "#{variant.start_sale_date.strftime('%Y-%m-%dT%I-%M%z')}/#{variant.end_sale_date.strftime('%Y-%m-%dT%I-%M%z')}")
-              end
-            end
-            xml.tag!('g:availability', 'in stock')
-            xml.tag!('g:id', variant.id)
-            # xml.tag!('g:mpn', variant.id)
-            xml.tag!('g:identifier_exists', 'false')#variant.sku.present? ? 'yes' : 'no')
-            build_product_type(xml, product)
-            # build_brand(xml, product)
-            build_shipping(xml, product)
-            # build_adwords_labels(xml, product)
-            build_custom_labels(xml, product, variant)
+          GOOGLE_MERCHANT_ATTR_MAP.each do |k, v|
+            k == 'g:price' ? value = variant.send("google_merchant_#{v}") : value = product.send("google_merchant_#{v}")
+            xml.tag!(k, value.to_s) if value.present?
           end
-        end # if product.google_merchant_available?
-      else
-        product.variants_including_master.each do |variant|
-          xml.item do
-            xml.tag!('link', "https://#{Spree::Config.site_url.gsub(/\/$/, '')}/products/#{product.slug}")
-            build_images(xml, product)
-            #xml.tag!('link', products_url(product.slug, host: Spree::Config.site_url.gsub(/\/$/,''), protocol: 'https'))
-
-            GOOGLE_MERCHANT_ATTR_MAP.each do |k, v|
-              k == 'g:price' ? value = variant.send("google_merchant_#{v}") : value = product.send("google_merchant_#{v}")
-              xml.tag!(k, value.to_s) if value.present?
+          if variant.product.sale_display and variant.sale_price.present?
+            xml.tag!('g:sale_price', variant.google_merchant_sale_price)
+            if variant.start_sale_date and variant.end_sale_date
+              xml.tag!('g:sale_price_effective_data', "#{variant.start_sale_date.strftime('%Y-%m-%dT%I-%M%z')}/#{variant.end_sale_date.strftime('%Y-%m-%dT%I-%M%z')}")
             end
-            if variant.product.sale_display and variant.sale_price.present?
-              xml.tag!('g:sale_price', variant.google_merchant_sale_price)
-              if variant.start_sale_date and variant.end_sale_date
-                xml.tag!('g:sale_price_effective_data', "#{variant.start_sale_date.strftime('%Y-%m-%dT%I-%M%z')}/#{variant.end_sale_date.strftime('%Y-%m-%dT%I-%M%z')}")
-              end
-            end
-            xml.tag!('g:availability', 'in stock')
-            xml.tag!('g:id', variant.id)
-            # xml.tag!('g:mpn', variant.id)
-            xml.tag!('g:identifier_exists', 'false')#variant.sku.present? ? 'yes' : 'no')
-            build_product_type(xml, product)
-            # build_brand(xml, product)
-            build_shipping(xml, product)
-            # build_adwords_labels(xml, product)
-            build_custom_labels(xml, product, variant)
           end
+          xml.tag!('g:availability', 'in stock')
+          xml.tag!('g:id', variant.id)
+          # xml.tag!('g:mpn', variant.id)
+          xml.tag!('g:identifier_exists', 'false')#variant.sku.present? ? 'yes' : 'no')
+          build_product_type(xml, product)
+          # build_brand(xml, product)
+          build_shipping(xml, product)
+          # build_adwords_labels(xml, product)
+          build_custom_labels(xml, product, variant)
         end
       end
     end
