@@ -307,30 +307,33 @@ module SpreeGoogleMerchant
         Spree::Product.where("deleted_at IS NULL OR deleted_at >= ?", Time.zone.now).includes(:taxons, :product_properties, :properties, :option_types, variants_including_master: [:default_price, :prices, :images, option_values: :option_type]).find_each(batch_size: 400) do |product|
           next unless product && validate_record(product)
           (product.variants.present? ? product.variants : product.variants_including_master).each do |variant|
-            array = [variant.id,
-                     product.send("google_merchant_title"),
-                     product.send("google_merchant_description"),
-                     "https://#{Spree::Config.site_url.gsub(/\/$/, '')}/products/#{product.slug}",
-                     # TODO tutaj bedzie zmiana linku dla variantu
-                     variant.csv_google_merchant_images[0],
-                     variant.csv_google_merchant_images[1],
-                     define_backorderable_custom(product, variant),
-                     variant.send("google_merchant_price"),
-                     product.send("google_merchant_condition"),
-                     variant.send("google_merchant_sale_price"),
-                     variant.send("google_merchant_sale_time_range"),
-                     product.send("google_merchant_product_category"),
-                     'false',
-                     product.google_merchant_product_type,
-                     product.send("google_shipping"),
-                     ('sale' if product.sale_taxon?),
-                     product.send("brand_name"),
-                     define_price_tier(variant),
-                     define_backorderable_custom(product, variant)]
-            csv << array
+            csv << csv_row_google_feed(variant, product)
           end
         end
       end
+    end
+
+    def csv_row_google_feed(variant, product)
+      [variant.id,
+       product.send("google_merchant_title"),
+       product.send("google_merchant_description"),
+       "https://#{Spree::Config.site_url.gsub(/\/$/, '')}/products/#{product.slug}",
+       # TODO tutaj bedzie zmiana linku dla variantu
+       variant.csv_google_merchant_images[0],
+       variant.csv_google_merchant_images[1],
+       define_backorderable_custom(product, variant),
+       variant.send("google_merchant_price"),
+       product.send("google_merchant_condition"),
+       variant.send("google_merchant_sale_price"),
+       variant.send("google_merchant_sale_time_range"),
+       product.send("google_merchant_product_category"),
+       'false',
+       product.google_merchant_product_type,
+       product.send("google_shipping"),
+       ('sale' if product.sale_taxon?),
+       product.send("brand_name"),
+       define_price_tier(variant),
+       define_backorderable_custom(product, variant)]
     end
   end
 end
