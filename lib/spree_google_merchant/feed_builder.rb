@@ -262,7 +262,7 @@ module SpreeGoogleMerchant
         if variant.stock_items.sum(&:count_on_hand) > 0
           value = "in stock"
         elsif variant.backorderable
-          value = "backorderable"
+          value = "preorder"
         else
           value = "out of stock"
         end
@@ -270,7 +270,7 @@ module SpreeGoogleMerchant
         if product.master.stock_items.sum(&:count_on_hand) > 0
           value = "in stock"
         elsif product.master.backorderable
-          value = "backorderable"
+          value = "preorder"
         else
           value = "out of stock"
         end
