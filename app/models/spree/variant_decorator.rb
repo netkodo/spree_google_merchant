@@ -32,7 +32,14 @@ Spree::Variant.class_eval do
   def csv_google_merchant_images
     main_image, *more_images = self.images
     return [] unless main_image
-    return main_image.attachment.url(:product).sub(/\?.*$/, '').sub(/^\/\//, 'http://'),
-        more_images.map{|image| image.attachment.url(:product).sub(/\?.*$/, '').sub(/^\/\//, 'http://')}.join(',')
+    more_output = image_url(more_images.first) if more_images.present?
+    image_output = image_url(main_image)
+    return more_images.present? ? [image_output, more_output] : [image_output]
+  end
+
+  private
+
+  def image_url(image)
+    image.attachment.url(:product).sub(/\?.*$/, '').sub(/^\/\//, 'http://')
   end
 end

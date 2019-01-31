@@ -307,6 +307,7 @@ module SpreeGoogleMerchant
         Spree::Product.where("deleted_at IS NULL OR deleted_at >= ?", Time.zone.now).includes(:taxons, :product_properties, :properties, :option_types, variants_including_master: [:default_price, :prices, :images, option_values: :option_type]).find_each(batch_size: 400) do |product|
           next unless product && validate_record(product)
           (product.variants.present? ? product.variants : product.variants_including_master).each do |variant|
+            next if product.master.blank? and product.master.images.blank?
             csv << csv_row_google_feed(variant, product)
           end
         end
@@ -314,13 +315,13 @@ module SpreeGoogleMerchant
     end
 
     def csv_row_google_feed(variant, product)
+      images = product.master.csv_google_merchant_images
       [variant.id,
        product.send("google_merchant_title"),
        product.send("google_merchant_description"),
        "https://#{Spree::Config.site_url.gsub(/\/$/, '')}/products/#{product.slug}",
-       # TODO tutaj bedzie zmiana linku dla variantu
-       variant.csv_google_merchant_images[0],
-       variant.csv_google_merchant_images[1],
+       images[0],
+       images[1],
        define_backorderable_custom(product, variant),
        variant.send("google_merchant_price"),
        product.send("google_merchant_condition"),
