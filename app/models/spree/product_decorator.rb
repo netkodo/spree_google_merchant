@@ -397,11 +397,11 @@ module Spree
     end
 
     def google_shipping
-      (self.shipping_category.present? and self.shipping_category.name == "Freight Shipping") ? 'freight' : 'small parcel'
+      (self.shipping_category.present? and self.shipping_category.name == 'Freight Shipping') ? 'freight' : 'small parcel'
     end
 
     def brand_name
-      self.brand.present? ? self.brand.name : "Scout & Nimble"
+      self.supplier.present? ? self.supplier.name : 'Scout & Nimble'
     end
   end
 end
