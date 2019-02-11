@@ -304,7 +304,7 @@ module SpreeGoogleMerchant
       if !Rails.env.development? and File.exists?(file_path)
         time = Time.zone.now.strftime('%m_%d_%Y_%I_%M')
         old_feed = "/home/hosting/scoutandnimble/shared/feeds/google_shopping#{time}.csv"
-        FileUtils.mv('./public/google_shopping.csv', old_feed)
+        FileUtils.mv('/home/hosting/scoutandnimble/shared/public/google_shopping.csv', old_feed)
       end
       CSV.open(file_path, 'wb', {col_sep: '\t'}) do |csv|
         csv << %w(id title description link image_link additional_image_link availability price condition sale_price sale_price_effetive_date google_product_category identifier_exists product_type custom_label_0 custom_label_1 custom_label_2 custom_label_3 custom_label_4)
