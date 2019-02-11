@@ -314,7 +314,9 @@ module SpreeGoogleMerchant
             csv << csv_row_google_feed(variant, product)
           end
         end
+
       end
+      Resque.enqueue DeleteOldestFeed
     end
 
     def csv_row_google_feed(variant, product)
