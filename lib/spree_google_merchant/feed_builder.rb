@@ -306,8 +306,8 @@ module SpreeGoogleMerchant
         old_feed = "/home/hosting/scoutandnimble/shared/feeds/google_shopping#{time}.csv"
         FileUtils.mv('/home/hosting/scoutandnimble/shared/public/google_shopping.csv', old_feed)
       end
-      CSV.open(file_path, 'wb', {col_sep: '\t'}) do |csv|
-        csv << %w(id title description link image_link additional_image_link availability price condition sale_price sale_price_effetive_date google_product_category identifier_exists product_type custom_label_0 custom_label_1 custom_label_2 custom_label_3 custom_label_4)
+      CSV.open(file_path, 'wb', col_sep: "\t") do |csv|
+        csv << %w(id title description link image_link additional_image_link availability price condition sale_price sale_price_effetive_date google_product_category identifier_exists product_type custom_label_0 custom_label_1 custom_label_2 custom_label_3 brand)
         Spree::Product.where('deleted_at IS NULL OR deleted_at >= ?', Time.zone.now).includes(:taxons, :product_properties, :properties, :option_types, variants_including_master: [:default_price, :prices, :images, option_values: :option_type]).find_each(batch_size: 400) do |product|
           next unless product && validate_record(product) && product.master.images.present?
           (product.variants.present? ? product.variants : product.variants_including_master).each do |variant|
@@ -324,7 +324,7 @@ module SpreeGoogleMerchant
       [variant.id,
        product.send('google_merchant_title'),
        product.send('google_merchant_description'),
-       "https://#{Spree::Config.site_url.gsub(/\/$/, '')}/products/#{product.slug}",
+       product.send('product_link'),
        images[0],
        images[1],
        define_backorderable_custom(product, variant),
@@ -336,10 +336,10 @@ module SpreeGoogleMerchant
        'false',
        product.google_merchant_product_type,
        product.send('google_shipping'),
-       ('sale' if product.sale_taxon?),
-       product.send('brand_name'),
+       product.send('sale_taxon'),
        define_price_tier(variant),
-       define_backorderable_custom(product, variant)]
+       define_backorderable_custom(product, variant),
+       product.send('brand_name')]
     end
   end
 end

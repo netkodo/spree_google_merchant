@@ -403,5 +403,13 @@ module Spree
     def brand_name
       self.supplier.present? ? self.supplier.name : 'Scout & Nimble'
     end
+
+    def sale_taxon
+      self.sale_taxon? ? 'sale' : ''
+    end
+
+    def product_link
+      "https://#{Spree::Config.site_url.gsub(/\/$/, '')}/products/#{self.try(:slug)}"
+    end
   end
 end
