@@ -337,6 +337,7 @@ module SpreeGoogleMerchant
        product.google_merchant_product_type,
        product.send('google_shipping'),
        product.send('sale_taxon'),
+       product.send('brand_name'),
        define_price_tier(variant),
        define_backorderable_custom(product, variant),
        product.send('brand_name')]
