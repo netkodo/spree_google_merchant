@@ -19,6 +19,20 @@ Spree::Variant.class_eval do
     format("%.2f %s", self.reload.price, self.currency).to_s
   end
 
+  def google_merchant_identifier_exists(product)
+    product.brand_name.present? and self.google_merchant_gtin.present?
+  end
+
+  def google_merchant_gtin
+    upcs = variant.property_variants.select{|x| x.property.name == 'upc'}
+    if upcs.present?
+      upc = upcs.first
+      upc.value
+    else
+      ''
+    end
+  end
+
   def google_merchant_sale_price
     return if !self.product.sale_display or self.sale_price.blank?
     format("%.2f %s", self.sale_price, self.currency).to_s
