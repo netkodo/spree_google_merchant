@@ -24,7 +24,7 @@ Spree::Variant.class_eval do
   end
 
   def google_merchant_gtin
-    upcs = self.property_variants.order(created_at: :desc).select{|x| x.property.name == 'upc'}
+    upcs = self.property_variants.order(updated_at: :desc).select{|x| x.property.name == 'upc'}
     if upcs.present?
       upc = upcs.first
       upc.value
