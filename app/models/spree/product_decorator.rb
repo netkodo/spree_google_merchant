@@ -411,5 +411,10 @@ module Spree
     def product_link
       "https://#{Spree::Config.site_url.gsub(/\/$/, '')}/products/#{self.try(:slug)}"
     end
+
+    def google_merchant_category
+      return unless taxons.any?
+      taxons.map{|x| x.self_and_ancestors}.flatten.map(&:name).uniq.join(" > ")
+    end
   end
 end

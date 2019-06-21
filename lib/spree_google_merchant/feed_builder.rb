@@ -307,7 +307,7 @@ module SpreeGoogleMerchant
         FileUtils.mv('/home/hosting/scoutandnimble/shared/public/google_shopping.csv', old_feed)
       end
       CSV.open(file_path, 'wb', col_sep: "\t") do |csv|
-        csv << %w(id title description link image_link additional_image_link availability price condition sale_price sale_price_effetive_date google_product_category identifier_exists gtin product_type custom_label_0 custom_label_1 custom_label_2 custom_label_3 custom_label_4 brand)
+        csv << %w(id title description link image_link additional_image_link availability price condition sale_price sale_price_effetive_date google_product_category identifier_exists gtin product_type custom_label_0 custom_label_1 custom_label_2 custom_label_3 custom_label_4 brand custom_label_5)
         Spree::Product.where('deleted_at IS NULL OR deleted_at >= ?', Time.zone.now).includes(:taxons, :product_properties, :properties, :option_types, variants_including_master: [:default_price, :prices, :images, option_values: :option_type]).find_each(batch_size: 400) do |product|
           next unless product && validate_record(product) && product.master.images.present?
           (product.variants.present? ? product.variants : product.variants_including_master).each do |variant|
@@ -341,7 +341,8 @@ module SpreeGoogleMerchant
        product.send('brand_name'),
        define_price_tier(variant),
        define_backorderable_custom(product, variant),
-       product.send('brand_name')]
+       product.send('brand_name'),
+      product.google_merchant_category]
     end
   end
 end
