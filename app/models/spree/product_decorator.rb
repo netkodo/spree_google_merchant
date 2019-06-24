@@ -414,7 +414,10 @@ module Spree
 
     def google_merchant_category
       return unless taxons.any?
-      taxons.order(:depth).last.self_and_ancestors.flatten.map(&:name).uniq.join(" > ")
+      parent = Spree::Taxon.find_by_name('Wholesaler')
+      taxons_to_join = taxons.where.not(parent_id: parent.id).order(:depth)
+      return unless taxons_to_join
+      taxons_to_join.last.self_and_ancestors.flatten.map(&:name).uniq.join(" > ")
     end
   end
 end
