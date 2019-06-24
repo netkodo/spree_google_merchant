@@ -414,7 +414,7 @@ module Spree
 
     def google_merchant_category
       return unless taxons.any?
-      taxons.map{|x| x.self_and_ancestors}.flatten.map(&:name).uniq.join(" > ")
+      taxons.order(:depth).last.self_and_ancestors.flatten.map(&:name).uniq.join(" > ")
     end
   end
 end

@@ -342,7 +342,7 @@ module SpreeGoogleMerchant
        define_price_tier(variant),
        define_backorderable_custom(product, variant),
        product.send('brand_name'),
-      product.google_merchant_category]
+       product.google_merchant_category]
     end
   end
 end
