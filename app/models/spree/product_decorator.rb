@@ -414,13 +414,13 @@ module Spree
 
     def google_merchant_category_deep
       return unless taxons.any?
-      return unless taxons_to_join
+      return unless taxons_to_join.present?
       deep_taxons.join(" > ")
     end
 
     def google_merchant_category_last
       return unless taxons.any?
-      return unless taxons_to_join
+      return unless taxons_to_join.present?
       deep_taxons.last
     end
 
