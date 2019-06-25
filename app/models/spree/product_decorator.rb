@@ -412,12 +412,30 @@ module Spree
       "https://#{Spree::Config.site_url.gsub(/\/$/, '')}/products/#{self.try(:slug)}"
     end
 
-    def google_merchant_category
+    def google_merchant_category_deep
       return unless taxons.any?
-      parent = Spree::Taxon.find_by_name('Wholesaler')
-      taxons_to_join = taxons.where.not(parent_id: parent.id).order(:depth)
       return unless taxons_to_join
-      taxons_to_join.last.self_and_ancestors.flatten.map(&:name).uniq.join(" > ")
+      deep_taxons.join(" > ")
+    end
+
+    def google_merchant_category_last
+      return unless taxons.any?
+      return unless taxons_to_join
+      deep_taxons.last
+    end
+
+    private
+
+    def wholesaler_taxon
+      @wholesaler_taxon ||= Spree::Taxon.find_by_name('Wholesaler')
+    end
+
+    def taxons_to_join
+      taxons.where.not(parent_id: wholesaler_taxon.id).order(:depth)
+    end
+
+    def deep_taxons
+      taxons_to_join.last.self_and_ancestors.flatten.map(&:name).uniq
     end
   end
 end
