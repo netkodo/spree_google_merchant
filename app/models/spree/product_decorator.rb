@@ -26,10 +26,10 @@ module Spree
       self.google_merchant_property(:gm_product_category) || Spree::GoogleMerchant::Config[:product_category]
     end
 
-    def google_merchant_product_type
-      return unless taxons.any?
-      taxons[0].self_and_ancestors.map(&:name).join(" > ")
-    end
+    # def google_merchant_product_type
+    #   return unless taxons.any?
+    #   taxons[0].self_and_ancestors.map(&:name).join(" > ")
+    # end
 
     # <g:condition> new | used | refurbished
     def google_merchant_condition
