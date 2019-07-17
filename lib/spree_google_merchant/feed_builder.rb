@@ -338,9 +338,9 @@ module SpreeGoogleMerchant
        product.google_merchant_category_last,
        product.send('google_shipping'), #0
        product.google_merchant_category_deep, #1
-       product.send('brand_name'), #2
+       variant.send('google_conversion_rating'), #2
        define_price_tier(variant), #3
-       define_backorderable_custom(product, variant), #4
+       variant.send('google_profit_margin'), #4
        product.send('brand_name')] #brand
     end
   end

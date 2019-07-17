@@ -51,6 +51,16 @@ Spree::Variant.class_eval do
     return more_images.present? ? [image_output, more_output] : [image_output]
   end
 
+  def google_conversion_rating
+    return unless self.conversion_rating
+    self.conversion_rating
+  end
+
+  def google_profit_margin
+    return unless self.profit_margin
+    self.profit_margin
+  end
+
   private
 
   def image_url(image)
